@@ -30,6 +30,18 @@ variable "pm_api_url" {
   type        = string
 }
 
+variable "lxc_ip" {
+  description = "Container IP"
+  type		= string
+  default 	= "10.0.70.3"
+}
+
+variable "hostname" {
+  description = "Container hostname"
+  type        = string
+  default     = "ansible"
+}
+
 provider "proxmox" {
   pm_api_url          = var.pm_api_url
   pm_api_token_id     = var.pm_api_token_id
@@ -37,10 +49,10 @@ provider "proxmox" {
   pm_tls_insecure     = true  # Because we're using self-signed certs
 }
 
-resource "proxmox_lxc" "blog" {
+resource "proxmox_lxc" "ansible" {
   target_node  = "pve1"
-  hostname     = "blog"
-  vmid         = 1401
+  hostname     = var.hostname
+  vmid         = 703
   ostemplate   = "local:vztmpl/ubuntu-24.04-standard_24.04-2_amd64.tar.zst"
   password     = var.lxc_password
   unprivileged = true
@@ -56,9 +68,9 @@ resource "proxmox_lxc" "blog" {
 
   network {
     name   = "eth0"
-    bridge = "vlan140"
-    ip     = "10.0.140.2/24"
-    gw     = "10.0.140.1"
+    bridge = "vlan70"
+    ip     = "${var.lxc_ip}/24"
+    gw     = "10.0.70.1"
   }
 
   features {
@@ -66,10 +78,10 @@ resource "proxmox_lxc" "blog" {
   }
 }
 
-output "blog_container_info" {
+output "ansible_container_info" {
   value = {
-    vmid     = proxmox_lxc.blog.vmid
-    hostname = proxmox_lxc.blog.hostname
-    ip       = "10.0.140.2"
+    vmid     = proxmox_lxc.ansible.vmid
+    hostname = proxmox_lxc.ansible.hostname
+    ip       = var.lxc_ip
   }
 }
