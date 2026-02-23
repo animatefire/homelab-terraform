@@ -42,6 +42,11 @@ variable "hostname" {
   default     = "ansible"
 }
 
+variable "ssh_public_key" {
+  description = "SSH public key for container access"
+  type        = string
+}
+
 provider "proxmox" {
   pm_api_url          = var.pm_api_url
   pm_api_token_id     = var.pm_api_token_id
@@ -57,6 +62,7 @@ resource "proxmox_lxc" "ansible" {
   password     = var.lxc_password
   unprivileged = true
   start        = true
+  ssh_public_keys = var.ssh_public_key
 
   rootfs {
     storage = "local-lvm"
