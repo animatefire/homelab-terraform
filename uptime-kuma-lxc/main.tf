@@ -48,7 +48,7 @@ resource "proxmox_lxc" "uptime_kuma" {
   vmid         = 1102
   ostemplate   = "local:vztmpl/ubuntu-24.04-standard_24.04-2_amd64.tar.zst"
   password     = var.lxc_password
-  unprivileged = false
+  unprivileged = true
   start        = true
   ssh_public_keys = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINvwKwTUkfVuJnCDEnw6C+l/0EP8cWYqy1lTLrpTdXW2 ansible"
 
