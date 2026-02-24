@@ -54,7 +54,7 @@ resource "proxmox_lxc" "uptime_kuma" {
 
   rootfs {
     storage = "local-lvm"
-    size    = "8G"
+    size    = "16G"
   }
 
   cores  = 1
